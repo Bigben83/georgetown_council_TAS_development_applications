@@ -68,20 +68,23 @@ date_scraped = ''
 doc.css('div.row.py-4.map-address .card-body').each do |application|
   # Extract data from each row and log it for debugging
   application_details = application.css('table tbody tr').map do |row|
-    row.css('td').map { |td| td.text.strip }
+    row_data = row.css('td').map { |td| td.text.strip }
+    logger.info("Row Data: #{row_data}") # Log each row's extracted data
+    row_data
   end
 
-  # Log the raw extracted table rows for inspection
-  logger.info("Raw Data Extracted: #{application_details}")
+  # Log the full application details for debugging
+  logger.info("Application Details: #{application_details}")
 
-  description = application_details[3].last # Proposal
-  address = application_details[2].last # Location
-  council_reference = application_details[0].last # Application ID
-  applicant = application_details[1].last # Applicant Name
-  title_reference = application_details[4].last # Title Reference
-  date_received = application_details[6].last # Opening Date
-  closing_date = application_details[7].last # Closing Date
-  document_description = application_details[8].last # Document link
+  # Extract specific fields
+  description = application_details[3]&.last # Proposal
+  address = application_details[2]&.last # Location
+  council_reference = application_details[0]&.last # Application ID
+  applicant = application_details[1]&.last # Applicant Name
+  title_reference = application_details[4]&.last # Title Reference
+  date_received = application_details[6]&.last # Opening Date
+  closing_date = application_details[7]&.last # Closing Date
+  document_description = application_details[8]&.last # Document link
 
   # Log the extracted data for clarity
   logger.info("Extracted Data: #{description}, #{address}, #{council_reference}, #{applicant}, #{title_reference}, #{date_received}, #{closing_date}, #{document_description}")
