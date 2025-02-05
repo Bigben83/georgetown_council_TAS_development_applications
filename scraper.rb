@@ -107,7 +107,7 @@ doc.css('div.card-body').each_with_index do |application, index|
     if existing_entry.empty? # Only insert if the entry doesn't already exist
     # Insert the data into the database
     db.execute("INSERT INTO georgetown (description, address, council_reference, applicant, title_reference, date_received, closing_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
-               ['Proposal', 'Location', 'Application ID', 'Applicant Name', 'Title reference', 'Opening Date', 'Closing Date'] )
+               [Proposal, Location, Application ID, Applicant Name, Title reference, Opening Date, Closing Date] )
   
     logger.info("Data for #{description} at #{address} saved to database.")
     else
