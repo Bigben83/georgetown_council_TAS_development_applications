@@ -63,15 +63,30 @@ applications = doc.css('div.row.py-4.map-address .card-body')
 
 # Step 5: Iterate through each application block and extract the data
 applications.each do |application|
-  description = application.at_css('table tbody tr:nth-child(4) td:nth-child(2)').text.strip
-  address = application.at_css('table tbody tr:nth-child(3) td:nth-child(2)').text.strip
-  council_reference = application.at_css('table tbody tr:nth-child(1) td:nth-child(2)').text.strip
-  applicant = application.at_css('table tbody tr:nth-child(2) td:nth-child(2)').text.strip
-  title_reference = application.at_css('table tbody tr:nth-child(5) td:nth-child(2)').text.strip
-  date_received = application.at_css('table tbody tr:nth-child(7) td:nth-child(2)').text.strip
-  closing_date = application.at_css('table tbody tr:nth-child(8) td:nth-child(2)').text.strip
-  document_description = application.at_css('table tbody tr:nth-child(9) td a').text.strip
-  document_url = application.at_css('table tbody tr:nth-child(9) td a')['href'] rescue nil
+  description = application.at_css('table tbody tr:nth-child(4) td:nth-child(2)')
+  description = description ? description.text.strip : nil
+
+  address = application.at_css('table tbody tr:nth-child(3) td:nth-child(2)')
+  address = address ? address.text.strip : nil
+
+  council_reference = application.at_css('table tbody tr:nth-child(1) td:nth-child(2)')
+  council_reference = council_reference ? council_reference.text.strip : nil
+
+  applicant = application.at_css('table tbody tr:nth-child(2) td:nth-child(2)')
+  applicant = applicant ? applicant.text.strip : nil
+
+  title_reference = application.at_css('table tbody tr:nth-child(5) td:nth-child(2)')
+  title_reference = title_reference ? title_reference.text.strip : nil
+
+  date_received = application.at_css('table tbody tr:nth-child(7) td:nth-child(2)')
+  date_received = date_received ? date_received.text.strip : nil
+
+  closing_date = application.at_css('table tbody tr:nth-child(8) td:nth-child(2)')
+  closing_date = closing_date ? closing_date.text.strip : nil
+
+  document_description = application.at_css('table tbody tr:nth-child(9) td a')
+  document_description = document_description ? document_description.text.strip : nil
+  document_url = document_description ? application.at_css('table tbody tr:nth-child(9) td a')['href'] : nil
 
   # Debugging: Print out the data for verification
   logger.info("Extracted Data: #{description}, #{address}, #{council_reference}, #{applicant}, #{title_reference}, #{date_received}, #{closing_date}, #{document_description}")
