@@ -65,38 +65,29 @@ document_description = ''
 date_scraped = ''
 
 # Step 4: Iterate through each application block and extract the data
-doc.css('div.row.py-4.map-address .card-body').each do |application|
-  # Extract the application details from the rows
+doc.css('div.card-body').each_with_index do |application, index|
+  # Extract the data from the table rows inside the card
   application_details = {}
-  
-  application.css('table tbody tr').each do |row|
-    # Extract the label and value for each row
-    label = row.at_css('td:nth-child(1)').text
-    value = row.at_css('td:nth-child(2)').text
 
-    # Log the extracted label and value for debugging
-    logger.info("Row Label: #{label}, Value: #{value}")
+  table = application.at_css('table.table')
+  if table
+    # Extract the rows from the table
+    rows = table.css('tbody tr')
+    logger.info("Extracting data for application ##{index + 1}")
 
-    # Store the extracted data in the hash with the label as the key
-    application_details[label] = value
-  end
+    # Extracting Application ID, Applicant, Location, Proposal, and Closing Date
+    application_details['Application ID'] = rows[0].css('td:nth-child(2)').text.strip
+    application_details['Applicant Name'] = rows[1].css('td:nth-child(2)').text.strip
+    application_details['Location'] = rows[2].css('td:nth-child(2)').text.strip
+    application_details['Proposal'] = rows[3].css('td:nth-child(2)').text.strip
+    application_details['Title reference'] = rows[4].css('td:nth-child(2)').text.strip
+    application_details['Notes'] = rows[5].css('td:nth-child(2)').text.strip
+    application_details['Opening Date'] = rows[6].css('td:nth-child(2)').text.strip
+    application_details['Closing Date'] = rows[7].css('td:nth-child(2)').text.strip
+    application_details['Documents'] = rows[8].css('td:nth-child(2) a').map { |link| link['href'] }.join(', ')
 
-  # Log the full extracted application details
-  logger.info("Full Application Details: #{application_details}")
-
-  # Extract specific fields
-  description = application_details['Proposal']
-  address = application_details['Location']
-  council_reference = application_details['Application ID']
-  applicant = application_details['Applicant Name']
-  title_reference = application_details['Title reference']
-  date_received = application_details['Opening Date']
-  closing_date = application_details['Closing Date']
-  document_description = application_details['Documents']
-
-  # Log the extracted data for clarity
-  logger.info("Extracted Data: #{description}, #{address}, #{council_reference}, #{applicant}, #{title_reference}, #{date_received}, #{closing_date}, #{document_description}")
-
+    # Log the extracted data for debugging purposes
+    logger.info("Extracted Data: #{application_details}")
 
   # Step 6: Ensure the entry does not already exist before inserting
   existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", [council_reference])
