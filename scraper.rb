@@ -66,28 +66,37 @@ date_scraped = ''
 
 # Step 4: Iterate through each application block and extract the data
 doc.css('div.row.py-4.map-address .card-body').each do |application|
-  # Extract data from each row and log it for debugging
-  application_details = application.css('table tbody tr').map do |row|
-    row_data = row.css('td').map { |td| td.text.strip }
-    logger.info("Row Data: #{row_data}") # Log each row's extracted data
-    row_data
+  # Extract the application details from the rows
+  application_details = {}
+  
+  application.css('table tbody tr').each do |row|
+    # Extract the label and value for each row
+    label = row.at_css('td:nth-child(1)')&.text&.strip
+    value = row.at_css('td:nth-child(2)')&.text&.strip
+
+    # Log the extracted label and value for debugging
+    logger.info("Row Label: #{label}, Value: #{value}")
+
+    # Store the extracted data in the hash with the label as the key
+    application_details[label] = value
   end
 
-  # Log the full application details for debugging
-  logger.info("Application Details: #{application_details}")
+  # Log the full extracted application details
+  logger.info("Full Application Details: #{application_details}")
 
   # Extract specific fields
-  description = application_details[3].last # Proposal
-  address = application_details[2].last # Location
-  council_reference = application_details[0].last # Application ID
-  applicant = application_details[1].last # Applicant Name
-  title_reference = application_details[4].last # Title Reference
-  date_received = application_details[6].last # Opening Date
-  closing_date = application_details[7].last # Closing Date
-  document_description = application_details[8].last # Document link
+  description = application_details['Proposal']
+  address = application_details['Location']
+  council_reference = application_details['Application ID']
+  applicant = application_details['Applicant Name']
+  title_reference = application_details['Title reference']
+  date_received = application_details['Opening Date']
+  closing_date = application_details['Closing Date']
+  document_description = application_details['Documents']
 
   # Log the extracted data for clarity
   logger.info("Extracted Data: #{description}, #{address}, #{council_reference}, #{applicant}, #{title_reference}, #{date_received}, #{closing_date}, #{document_description}")
+
 
   # Step 6: Ensure the entry does not already exist before inserting
   existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", [council_reference])
