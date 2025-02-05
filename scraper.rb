@@ -34,6 +34,7 @@ db.execute <<-SQL
   CREATE TABLE IF NOT EXISTS georgetown (
     id INTEGER PRIMARY KEY,
     description TEXT,
+    address TEXT
     date_received TEXT,
     address TEXT,
     council_reference TEXT,
@@ -43,6 +44,20 @@ db.execute <<-SQL
     document_description TEXT
   );
 SQL
+
+# Define variables for storing extracted data for each entry
+address = ''  
+description = ''
+on_notice_to = ''
+date_received = ''
+closing_date = ''
+council_reference = ''
+applicant = ''
+owner = ''
+stage_description = ''
+stage_status = ''
+document_description = ''
+date_scraped = ''
 
 # Step 4: Find the development applications in the page content
 applications = doc.css('div.row.py-4.map-address .card-body')
