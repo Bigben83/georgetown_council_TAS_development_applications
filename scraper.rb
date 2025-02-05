@@ -72,11 +72,13 @@ doc.css('div.card-body').each_with_index do |application, index|
   table = application.at_css('table.table')
   if table
     # Extract the rows from the table
-    rows = table.css('tbody tr')
+    rows = table.css('tr')
     logger.info("Rows found: #{rows.size}")
 
-    # Log the entire table HTML for debugging purposes
-    logger.info("Full Table HTML: #{table.to_html}")
+    # Log each row for debugging
+    rows.each_with_index do |row, row_index|
+      logger.info("Row ##{row_index + 1}: #{row.to_html}")
+    end
 
     # Skip if no rows were found
     next if rows.empty?
