@@ -88,9 +88,10 @@ doc.css('div.card-body').each_with_index do |application, index|
     application_details['Proposal'] = rows[3].css('td:nth-child(2)').text.strip rescue nil
     application_details['Title reference'] = rows[4].css('td:nth-child(2)').text.strip rescue nil
     application_details['Notes'] = rows[5].css('td:nth-child(2)').text.strip rescue nil
-    application_details['Opening Date'] = rows[6].css('td:nth-child(2)').text.strip rescue nil
-    application_details['Closing Date'] = rows[7].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Opening Date'] = Date.strptime(rows[6].css('td:nth-child(2)').text.strip, '%d %B %Y').strftime('%Y-%m-%d') rescue nil
+    application_details['Closing Date'] = Date.strptime(rows[7].css('td:nth-child(2)').text.strip, '%d %B %Y').strftime('%Y-%m-%d') rescue nil
     application_details['Documents'] = rows[8].css('td:nth-child(2) a').map { |link| link['href'] }.join(', ') rescue nil
+    date_scraped = Date.today.to_s
 
     # Log the extracted data for debugging purposes
     # logger.info("Extracted Data: #{application_details}")
@@ -100,8 +101,8 @@ doc.css('div.card-body').each_with_index do |application, index|
   
     if existing_entry.empty? # Only insert if the entry doesn't already exist
     # Insert the data into the database
-    db.execute("INSERT INTO georgetown (description, address, council_reference, applicant, title_reference, date_received, closing_date, document_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-             [application_details['Proposal'], application_details['Location'], application_details['Application ID'], application_details['Applicant Name'], application_details['Title reference'], application_details['Opening Date'], application_details['Closing Date'], application_details['Documents']])
+    db.execute("INSERT INTO georgetown (description, address, council_reference, applicant, title_reference, date_received, closing_date, document_description, date_scraped) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+             [application_details['Proposal'], application_details['Location'], application_details['Application ID'], application_details['Applicant Name'], application_details['Title reference'], application_details['Opening Date'], application_details['Closing Date'], application_details['Documents'], date_scraped])
 
     logger.info("Data for application #{application_details['Application ID']} saved to database.")
     else
