@@ -71,8 +71,8 @@ doc.css('div.row.py-4.map-address .card-body').each do |application|
   
   application.css('table tbody tr').each do |row|
     # Extract the label and value for each row
-    label = row.at_css('td:nth-child(1)').text.strip
-    value = row.at_css('td:nth-child(2)').text.strip
+    label = row.at_css('td:nth-child(1)').text
+    value = row.at_css('td:nth-child(2)').text
 
     # Log the extracted label and value for debugging
     logger.info("Row Label: #{label}, Value: #{value}")
