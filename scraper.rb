@@ -102,16 +102,16 @@ doc.css('div.card-body').each_with_index do |application, index|
     logger.info("Extracted Data: #{application_details}")
     
     # Step 6: Ensure the entry does not already exist before inserting
-    existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", [Application ID])
+    existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", application_details['Application ID'] )
   
     if existing_entry.empty? # Only insert if the entry doesn't already exist
     # Insert the data into the database
-    db.execute("INSERT INTO georgetown (description, address, council_reference, applicant, title_reference, date_received, closing_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
-               [Proposal, Location, Application ID, Applicant Name, Title reference, Opening Date, Closing Date] )
-  
-    logger.info("Data for #{description} at #{address} saved to database.")
+    db.execute("INSERT INTO georgetown (description, address, council_reference, applicant, title_reference, date_received, closing_date, document_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+             [application_details['Proposal'], application_details['Location'], application_details['Application ID'], application_details['Applicant Name'], application_details['Title reference'], application_details['Opening Date'], application_details['Closing Date'], application_details['Documents']])
+
+    logger.info("Data for application #{application_details['Application ID']} saved to database.")
     else
-      logger.info("Duplicate entry for application #{council_reference} found. Skipping insertion.")
+      logger.info("Duplicate entry for application #{application_details['Application ID']} found. Skipping insertion.")
     end
   else
     logger.warn("No table found in card body for application ##{index + 1}.")
