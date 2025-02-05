@@ -24,7 +24,7 @@ end
 doc = Nokogiri::HTML(page_html)
 
 # Print out a snippet of the HTML for debugging
-logger.info("HTML Content snippet: #{doc.to_html[0..500]}")
+# logger.info("HTML Content snippet: #{doc.to_html[0..500]}")
 
 # Step 3: Initialize the SQLite database
 db = SQLite3::Database.new "data.sqlite"
@@ -60,7 +60,7 @@ applications.each do |application|
   document_url = application.at_css('table tbody tr:nth-child(9) td a')['href'] rescue nil
 
   # Step 6: Ensure the entry does not already exist before inserting
-  existing_entry = db.execute("SELECT * FROM breakoday WHERE council_reference = ?", [council_reference])
+  existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", [council_reference])
 
   if existing_entry.empty? # Only insert if the entry doesn't already exist
   # Insert the data into the database
