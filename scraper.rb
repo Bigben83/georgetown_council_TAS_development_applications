@@ -43,7 +43,8 @@ db.execute <<-SQL
     owner TEXT,
     stage_description TEXT,
     stage_status TEXT,
-    document_description TEXT
+    document_description TEXT,
+    title_reference TEXT
   );
 SQL
 
@@ -51,6 +52,7 @@ SQL
 address = ''  
 description = ''
 on_notice_to = ''
+title_reference = ''
 date_received = ''
 council_reference = ''
 applicant = ''
