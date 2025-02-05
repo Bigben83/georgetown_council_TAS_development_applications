@@ -63,6 +63,7 @@ stage_description = ''
 stage_status = ''
 document_description = ''
 date_scraped = ''
+title_reference = ''
 
 # Step 4: Iterate through each application block and extract the data
 doc.css('div.card-body').each_with_index do |application, index|
@@ -91,7 +92,7 @@ doc.css('div.card-body').each_with_index do |application, index|
     application_details['Applicant Name'] = rows[1].css('td:nth-child(2)').text.strip rescue nil
     application_details['Location'] = rows[2].css('td:nth-child(2)').text.strip rescue nil
     application_details['Proposal'] = rows[3].css('td:nth-child(2)').text.strip rescue nil
-    # application_details['Title reference'] = rows[4].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Title reference'] = rows[4].css('td:nth-child(2)').text.strip rescue nil
     application_details['Notes'] = rows[5].css('td:nth-child(2)').text.strip rescue nil
     application_details['Opening Date'] = rows[6].css('td:nth-child(2)').text.strip rescue nil
     application_details['Closing Date'] = rows[7].css('td:nth-child(2)').text.strip rescue nil
@@ -101,12 +102,12 @@ doc.css('div.card-body').each_with_index do |application, index|
     logger.info("Extracted Data: #{application_details}")
     
     # Step 6: Ensure the entry does not already exist before inserting
-    existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", [council_reference])
+    existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", [Application ID])
   
     if existing_entry.empty? # Only insert if the entry doesn't already exist
     # Insert the data into the database
     db.execute("INSERT INTO georgetown (description, address, council_reference, applicant, title_reference, date_received, closing_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
-               [description, address, council_reference, applicant, title_reference, date_received, closing_date])
+               ['Proposal', 'Location', 'Application ID', 'Applicant Name', title_reference, 'Opening Date', 'Closing Date')
   
     logger.info("Data for #{description} at #{address} saved to database.")
     else
