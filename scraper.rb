@@ -26,12 +26,6 @@ doc = Nokogiri::HTML(page_html)
 # Step 3: Inspect the HTML structure of a specific application card for debugging
 #applications = doc.css('div.row.py-4.map-address .card-body')
 
-# Print out the raw HTML of the first application block for debugging purposes
-#logger.info("First application HTML block: #{applications.first.to_html}")
-
-# Print out a snippet of the HTML for debugging
-# logger.info("HTML Content snippet: #{doc.to_html[0..500]}")
-
 # Step 3: Initialize the SQLite database
 db = SQLite3::Database.new "data.sqlite"
 
@@ -67,18 +61,18 @@ title_reference = ''
 
 # Step 4: Iterate through each application block and extract the data
 doc.css('div.card-body').each_with_index do |application, index|
-  logger.info("Extracting data for application ##{index + 1}")
+  # logger.info("Extracting data for application ##{index + 1}")
 
   # Find the table inside the card-body
   table = application.at_css('table.table')
   if table
     # Extract the rows from the table
     rows = table.css('tr')
-    logger.info("Rows found: #{rows.size}")
+    # logger.info("Rows found: #{rows.size}")
 
     # Log each row for debugging
     rows.each_with_index do |row, row_index|
-      logger.info("Row ##{row_index + 1}: #{row.to_html}")
+      # logger.info("Row ##{row_index + 1}: #{row.to_html}")
     end
 
     # Skip if no rows were found
@@ -99,7 +93,7 @@ doc.css('div.card-body').each_with_index do |application, index|
     application_details['Documents'] = rows[8].css('td:nth-child(2) a').map { |link| link['href'] }.join(', ') rescue nil
 
     # Log the extracted data for debugging purposes
-    logger.info("Extracted Data: #{application_details}")
+    # logger.info("Extracted Data: #{application_details}")
     
     # Step 6: Ensure the entry does not already exist before inserting
     existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", application_details['Application ID'] )
