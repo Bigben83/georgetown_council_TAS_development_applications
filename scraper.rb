@@ -8,7 +8,7 @@ require 'uri'
 logger = Logger.new(STDOUT)
 
 # Define the URL of the page
-url = 'https://georgetown.tas.gov.au/development-applications'
+url = 'https://georgetown.tas.gov.au/development-applications/'
 
 # Step 1: Fetch the page content using open-uri
 begin
@@ -64,15 +64,19 @@ applications = doc.css('div.row.py-4.map-address .card-body')
 
 # Step 5: Iterate through each application block and extract the data
 applications.each do |application|
-  description = application.at_css('table tbody tr:nth-child(4) td').text.strip rescue nil
-  address = application.at_css('table tbody tr:nth-child(3) td').text.strip rescue nil
-  council_reference = application.at_css('table tbody tr:nth-child(1) td').text.strip rescue nil
-  applicant = application.at_css('table tbody tr:nth-child(2) td').text.strip rescue nil
-  title_reference = application.at_css('table tbody tr:nth-child(5) td').text.strip rescue nil
-  date_received = application.at_css('table tbody tr:nth-child(7) td').text.strip rescue nil
-  closing_date = application.at_css('table tbody tr:nth-child(8) td').text.strip rescue nil
-  document_description = application.at_css('table tbody tr:nth-child(9) td a').text.strip rescue nil
+  # Extract the necessary details using the correct CSS selectors
+  description = application.at_css('table tbody tr:nth-child(4) td')&.text&.strip
+  address = application.at_css('table tbody tr:nth-child(3) td')&.text&.strip
+  council_reference = application.at_css('table tbody tr:nth-child(1) td')&.text&.strip
+  applicant = application.at_css('table tbody tr:nth-child(2) td')&.text&.strip
+  title_reference = application.at_css('table tbody tr:nth-child(5) td')&.text&.strip
+  date_received = application.at_css('table tbody tr:nth-child(7) td')&.text&.strip
+  closing_date = application.at_css('table tbody tr:nth-child(8) td')&.text&.strip
+  document_description = application.at_css('table tbody tr:nth-child(9) td a')&.text&.strip
   document_url = application.at_css('table tbody tr:nth-child(9) td a')['href'] rescue nil
+
+  # Debugging: Print out the data for verification
+  logger.info("Extracted Data: #{description}, #{address}, #{council_reference}, #{applicant}, #{title_reference}, #{date_received}, #{closing_date}, #{document_description}")
 
   # Step 6: Ensure the entry does not already exist before inserting
   existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", [council_reference])
