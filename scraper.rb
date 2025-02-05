@@ -34,12 +34,15 @@ db.execute <<-SQL
   CREATE TABLE IF NOT EXISTS georgetown (
     id INTEGER PRIMARY KEY,
     description TEXT,
+    date_scraped TEXT,
     date_received TEXT,
+    on_notice_to TEXT,
     address TEXT,
     council_reference TEXT,
     applicant TEXT,
-    title_reference TEXT,
-    closing_date TEXT,
+    owner TEXT,
+    stage_description TEXT,
+    stage_status TEXT,
     document_description TEXT
   );
 SQL
@@ -49,7 +52,6 @@ address = ''
 description = ''
 on_notice_to = ''
 date_received = ''
-closing_date = ''
 council_reference = ''
 applicant = ''
 owner = ''
@@ -57,7 +59,6 @@ stage_description = ''
 stage_status = ''
 document_description = ''
 date_scraped = ''
-title_reference = ''
 
 # Step 4: Iterate through each application block and extract the data
 doc.css('div.card-body').each_with_index do |application, index|
