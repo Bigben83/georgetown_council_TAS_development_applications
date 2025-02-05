@@ -23,8 +23,8 @@ end
 # Step 2: Parse the page content using Nokogiri
 doc = Nokogiri::HTML(page_html)
 
-# Print out a snippet of the HTML for debugging
-# logger.info("HTML Content snippet: #{doc.to_html[0..500]}")
+# Print out the raw HTML of the first application block for debugging purposes
+logger.info("First application HTML block: #{applications.first.to_html}")
 
 # Step 3: Initialize the SQLite database
 db = SQLite3::Database.new "data.sqlite"
