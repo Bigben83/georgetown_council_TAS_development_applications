@@ -64,37 +64,26 @@ stage_status = ''
 document_description = ''
 date_scraped = ''
 
-# Step 4: Find the development applications in the page content
-applications = doc.css('div.row.py-4.map-address .card-body')
-
 # Step 4: Iterate through each application block and extract the data
 doc.css('div.row.py-4.map-address .card-body').each do |application|
-  description = application.at_css('table tbody tr:nth-child(4) td:nth-child(2)')
-  description = description ? description.text.strip : nil
+  # Extract data from each row and log it for debugging
+  application_details = application.css('table tbody tr').map do |row|
+    row.css('td').map { |td| td.text.strip }
+  end
 
-  address = application.at_css('table tbody tr:nth-child(3) td:nth-child(2)')
-  address = address ? address.text.strip : nil
+  # Log the raw extracted table rows for inspection
+  logger.info("Raw Data Extracted: #{application_details}")
 
-  council_reference = application.at_css('table tbody tr:nth-child(1) td:nth-child(2)')
-  council_reference = council_reference ? council_reference.text.strip : nil
+  description = application_details[3]&.last # Proposal
+  address = application_details[2]&.last # Location
+  council_reference = application_details[0]&.last # Application ID
+  applicant = application_details[1]&.last # Applicant Name
+  title_reference = application_details[4]&.last # Title Reference
+  date_received = application_details[6]&.last # Opening Date
+  closing_date = application_details[7]&.last # Closing Date
+  document_description = application_details[8]&.last # Document link
 
-  applicant = application.at_css('table tbody tr:nth-child(2) td:nth-child(2)')
-  applicant = applicant ? applicant.text.strip : nil
-
-  title_reference = application.at_css('table tbody tr:nth-child(5) td:nth-child(2)')
-  title_reference = title_reference ? title_reference.text.strip : nil
-
-  date_received = application.at_css('table tbody tr:nth-child(7) td:nth-child(2)')
-  date_received = date_received ? date_received.text.strip : nil
-
-  closing_date = application.at_css('table tbody tr:nth-child(8) td:nth-child(2)')
-  closing_date = closing_date ? closing_date.text.strip : nil
-
-  document_description = application.at_css('table tbody tr:nth-child(9) td a')
-  document_description = document_description ? document_description.text.strip : nil
-  document_url = document_description ? application.at_css('table tbody tr:nth-child(9) td a')['href'] : nil
-
-  # Debugging: Print out the extracted data for verification
+  # Log the extracted data for clarity
   logger.info("Extracted Data: #{description}, #{address}, #{council_reference}, #{applicant}, #{title_reference}, #{date_received}, #{closing_date}, #{document_description}")
 
   # Step 6: Ensure the entry does not already exist before inserting
