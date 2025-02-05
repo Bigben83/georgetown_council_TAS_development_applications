@@ -75,6 +75,9 @@ doc.css('div.card-body').each_with_index do |application, index|
     rows = table.css('tbody tr')
     logger.info("Rows found: #{rows.size}")
 
+    # Log the entire table HTML for debugging purposes
+    logger.info("Full Table HTML: #{table.to_html}")
+
     # Skip if no rows were found
     next if rows.empty?
 
@@ -82,19 +85,19 @@ doc.css('div.card-body').each_with_index do |application, index|
     application_details = {}
 
     # Make sure to extract the right text from the rows using correct indices
-    application_details['Application ID'] = rows[0].css('td:nth-child(2)').text.strip
-    application_details['Applicant Name'] = rows[1].css('td:nth-child(2)').text.strip
-    application_details['Location'] = rows[2].css('td:nth-child(2)').text.strip
-    application_details['Proposal'] = rows[3].css('td:nth-child(2)').text.strip
-    application_details['Title reference'] = rows[4].css('td:nth-child(2)').text.strip
-    application_details['Notes'] = rows[5].css('td:nth-child(2)').text.strip
-    application_details['Opening Date'] = rows[6].css('td:nth-child(2)').text.strip
-    application_details['Closing Date'] = rows[7].css('td:nth-child(2)').text.strip
-    application_details['Documents'] = rows[8].css('td:nth-child(2) a').map { |link| link['href'] }.join(', ')
+    application_details['Application ID'] = rows[0].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Applicant Name'] = rows[1].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Location'] = rows[2].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Proposal'] = rows[3].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Title reference'] = rows[4].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Notes'] = rows[5].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Opening Date'] = rows[6].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Closing Date'] = rows[7].css('td:nth-child(2)').text.strip rescue nil
+    application_details['Documents'] = rows[8].css('td:nth-child(2) a').map { |link| link['href'] }.join(', ') rescue nil
 
     # Log the extracted data for debugging purposes
     logger.info("Extracted Data: #{application_details}")
-
+    
     # Step 6: Ensure the entry does not already exist before inserting
     existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", [council_reference])
   
