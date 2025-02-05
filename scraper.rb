@@ -103,8 +103,8 @@ doc.css('div.row.py-4.map-address .card-body').each do |application|
 
   if existing_entry.empty? # Only insert if the entry doesn't already exist
   # Insert the data into the database
-  db.execute("INSERT INTO georgetown (description, address, council_reference, applicant, title_reference, date_received, closing_date, document_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-             [description, address, council_reference, applicant, title_reference, date_received, closing_date, document_url])
+  db.execute("INSERT INTO georgetown (description, address, council_reference, applicant, title_reference, date_received, closing_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
+             [description, address, council_reference, applicant, title_reference, date_received, closing_date])
 
   logger.info("Data for #{description} at #{address} saved to database.")
   else
