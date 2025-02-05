@@ -63,14 +63,14 @@ applications = doc.css('div.row.py-4.map-address .card-body')
 
 # Step 5: Iterate through each application block and extract the data
 applications.each do |application|
-  description = application.at_css('table tbody tr:nth-child(4) td') ? application.at_css('table tbody tr:nth-child(4) td').text.strip : nil
-  address = application.at_css('table tbody tr:nth-child(3) td') ? application.at_css('table tbody tr:nth-child(3) td').text.strip : nil
-  council_reference = application.at_css('table tbody tr:nth-child(1) td') ? application.at_css('table tbody tr:nth-child(1) td').text.strip : nil
-  applicant = application.at_css('table tbody tr:nth-child(2) td') ? application.at_css('table tbody tr:nth-child(2) td').text.strip : nil
-  title_reference = application.at_css('table tbody tr:nth-child(5) td') ? application.at_css('table tbody tr:nth-child(5) td').text.strip : nil
-  date_received = application.at_css('table tbody tr:nth-child(7) td') ? application.at_css('table tbody tr:nth-child(7) td').text.strip : nil
-  closing_date = application.at_css('table tbody tr:nth-child(8) td') ? application.at_css('table tbody tr:nth-child(8) td').text.strip : nil
-  document_description = application.at_css('table tbody tr:nth-child(9) td a') ? application.at_css('table tbody tr:nth-child(9) td a').text.strip : nil
+  description = application.at_css('table tbody tr:nth-child(4) td:nth-child(2)')&.text&.strip
+  address = application.at_css('table tbody tr:nth-child(3) td:nth-child(2)')&.text&.strip
+  council_reference = application.at_css('table tbody tr:nth-child(1) td:nth-child(2)')&.text&.strip
+  applicant = application.at_css('table tbody tr:nth-child(2) td:nth-child(2)')&.text&.strip
+  title_reference = application.at_css('table tbody tr:nth-child(5) td:nth-child(2)')&.text&.strip
+  date_received = application.at_css('table tbody tr:nth-child(7) td:nth-child(2)')&.text&.strip
+  closing_date = application.at_css('table tbody tr:nth-child(8) td:nth-child(2)')&.text&.strip
+  document_description = application.at_css('table tbody tr:nth-child(9) td a')&.text&.strip
   document_url = application.at_css('table tbody tr:nth-child(9) td a')['href'] rescue nil
 
   # Debugging: Print out the data for verification
