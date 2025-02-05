@@ -67,8 +67,8 @@ date_scraped = ''
 # Step 4: Find the development applications in the page content
 applications = doc.css('div.row.py-4.map-address .card-body')
 
-# Step 5: Iterate through each application block and extract the data
-applications.each do |application|
+# Step 4: Iterate through each application block and extract the data
+doc.css('div.row.py-4.map-address .card-body').each do |application|
   description = application.at_css('table tbody tr:nth-child(4) td:nth-child(2)')
   description = description ? description.text.strip : nil
 
@@ -94,7 +94,7 @@ applications.each do |application|
   document_description = document_description ? document_description.text.strip : nil
   document_url = document_description ? application.at_css('table tbody tr:nth-child(9) td a')['href'] : nil
 
-  # Debugging: Print out the data for verification
+  # Debugging: Print out the extracted data for verification
   logger.info("Extracted Data: #{description}, #{address}, #{council_reference}, #{applicant}, #{title_reference}, #{date_received}, #{closing_date}, #{document_description}")
 
   # Step 6: Ensure the entry does not already exist before inserting
