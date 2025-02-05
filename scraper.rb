@@ -67,21 +67,21 @@ date_scraped = ''
 # Step 4: Iterate through each application block and extract the data
 doc.css('div.card-body').each_with_index do |application, index|
   logger.info("Extracting data for application ##{index + 1}")
-  
-  # Check the structure of the application block
-  logger.info("Application HTML block: #{application.to_html}")
 
-  # Extract the data from the table rows inside the card
-  application_details = {}
-
-  # Find the table within the application card
+  # Find the table inside the card-body
   table = application.at_css('table.table')
   if table
     # Extract the rows from the table
     rows = table.css('tbody tr')
     logger.info("Rows found: #{rows.size}")
 
-    # Extracting Application ID, Applicant, Location, Proposal, and Closing Date
+    # Skip if no rows were found
+    next if rows.empty?
+
+    # Extract the data from the table rows
+    application_details = {}
+
+    # Make sure to extract the right text from the rows using correct indices
     application_details['Application ID'] = rows[0].css('td:nth-child(2)').text.strip
     application_details['Applicant Name'] = rows[1].css('td:nth-child(2)').text.strip
     application_details['Location'] = rows[2].css('td:nth-child(2)').text.strip
