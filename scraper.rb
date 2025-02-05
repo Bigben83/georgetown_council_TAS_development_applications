@@ -34,7 +34,6 @@ db.execute <<-SQL
   CREATE TABLE IF NOT EXISTS georgetown (
     id INTEGER PRIMARY KEY,
     description TEXT,
-    address TEXT
     date_received TEXT,
     address TEXT,
     council_reference TEXT,
