@@ -23,8 +23,14 @@ end
 # Step 2: Parse the page content using Nokogiri
 doc = Nokogiri::HTML(page_html)
 
+# Step 3: Inspect the HTML structure of a specific application card for debugging
+applications = doc.css('div.row.py-4.map-address .card-body')
+
 # Print out the raw HTML of the first application block for debugging purposes
 logger.info("First application HTML block: #{applications.first.to_html}")
+
+# Print out a snippet of the HTML for debugging
+# logger.info("HTML Content snippet: #{doc.to_html[0..500]}")
 
 # Step 3: Initialize the SQLite database
 db = SQLite3::Database.new "data.sqlite"
