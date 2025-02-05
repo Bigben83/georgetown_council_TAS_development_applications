@@ -102,7 +102,7 @@ doc.css('div.card-body').each_with_index do |application, index|
     logger.info("Extracted Data: #{application_details}")
     
     # Step 6: Ensure the entry does not already exist before inserting
-    existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", ['Application ID'])
+    existing_entry = db.execute("SELECT * FROM georgetown WHERE council_reference = ?", [Application ID])
   
     if existing_entry.empty? # Only insert if the entry doesn't already exist
     # Insert the data into the database
