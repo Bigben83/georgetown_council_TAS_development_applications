@@ -91,7 +91,7 @@ doc.css('div.card-body').each_with_index do |application, index|
     application_details['Applicant Name'] = rows[1].css('td:nth-child(2)').text.strip rescue nil
     application_details['Location'] = rows[2].css('td:nth-child(2)').text.strip rescue nil
     application_details['Proposal'] = rows[3].css('td:nth-child(2)').text.strip rescue nil
-    application_details['Title reference'] = rows[4].css('td:nth-child(2)').text.strip rescue nil
+    # application_details['Title reference'] = rows[4].css('td:nth-child(2)').text.strip rescue nil
     application_details['Notes'] = rows[5].css('td:nth-child(2)').text.strip rescue nil
     application_details['Opening Date'] = rows[6].css('td:nth-child(2)').text.strip rescue nil
     application_details['Closing Date'] = rows[7].css('td:nth-child(2)').text.strip rescue nil
